@@ -89,12 +89,6 @@ void CapycitySim::start_menu()
 // Print Area
 void CapycitySim::print_area()
 {
-     // Test
-    std::cout << "+ ";
-    for(int i = 0; i < m_rows; i++)
-    {
-        std::cout << i << " ";
-    }
 
     for(int i = 0; i < m_columns; i++)
     {
@@ -103,7 +97,6 @@ void CapycitySim::print_area()
             std::cout << m_area[i][j] << " ";
         }
         std::cout << "\n";
-        std::cout << i << " ";
     }
     // print_information();
 }
