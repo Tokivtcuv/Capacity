@@ -1,15 +1,56 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "Building.h"
 #include "Material.h"
 
 // Getter & Setter
+double Building::get_base_price() { return m_base_price; }
+std::string Building::get_label() { return m_label; }
+std::string Building::get_name() {return m_label; }
+std::map<Material*, int> Building::get_material_list() {return m_material_list; }
+void Building::set_name(std::string name) {
+    m_name = name;
+}
+void Building::set_label(std::string label)
+{
+    m_label = label;
+}
+void Building::set_base_price(double price)
+{
+    m_base_price = price;
+}
+
+double Building::sum_material_costs()
+{
+    double sum = 0;
+    for(std::pair<Material*, int> i : this->get_material_list())
+    {
+        sum += (i.first->get_price() * i.second);
+    }
+    return sum;
+}
+double Building::total_costs()
+{
+    return this->get_base_price() + this->sum_material_costs();
+}
+void Building::generate_mat_list(int w_cnt, int i_cnt, int p_cnt)
+{
+    m_material_list.insert(std::pair<Material*, int>(new Wood(), w_cnt));
+    m_material_list.insert(std::pair<Material*, int>(new Metal(), i_cnt));
+    m_material_list.insert(std::pair<Material*, int>(new Plastic(), p_cnt));
+
+
+}
+
+/*
 std::string Building::get_name() { return m_name; }
 void Building::set_name(std::string new_name) { m_name = new_name; }
 std::string Building::get_label() { return m_label; }
 void Building::set_label(std::string new_label) { m_label = new_label;}
-std::vector<Material*> Building::get_material_list() {return m_material_list;}
+// std::vector<Material*> Building::get_material_list() {return m_material_list;}
+std::map<Material*, int> Building::get_material_list() { return m_material_list; }
 double Building::get_base_price() { return m_base_price; }
 void Building::set_base_price(double new_base_price) { m_base_price = new_base_price; }
 
@@ -60,6 +101,7 @@ double Building::total_costs()
 {
     return get_base_price() + total_material_costs();
 }
+*/
 
 // Constructors
 Hydropowerstation::Hydropowerstation()
@@ -67,7 +109,8 @@ Hydropowerstation::Hydropowerstation()
     this->set_name("Hydropowerstation");
     this->set_label("H");
     this->set_base_price(100);
-    this->add_materials(3,7,12);
+    //this->add_materials(3,7,12);
+    this->generate_mat_list(5,10,15);
 }
 
 Windpowerstation::Windpowerstation()
@@ -75,7 +118,8 @@ Windpowerstation::Windpowerstation()
     this->set_name("Windpowerstation");
     this->set_label("W");
     this->set_base_price(150);
-    this->add_materials(5,10,3);
+    //this->add_materials(5,10,3);
+    this->generate_mat_list(10,5,15);
 }
 
 Solarpanel::Solarpanel()
@@ -83,5 +127,6 @@ Solarpanel::Solarpanel()
     this->set_name("Solarpanel");
     this->set_label("S");
     this->set_base_price(200);
-    this->add_materials(2,9,6);
+    //this->add_materials(2,9,6);
+    this->generate_mat_list(15,10,5);
 }

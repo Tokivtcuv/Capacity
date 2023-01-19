@@ -73,7 +73,8 @@ void CapycitySim::start_menu()
                 break;
             case 4:
                 // Costs
-                print_information();
+                //print_information();
+                print_building_material_cost();
                 break;
             case 5:
                 // Exit
@@ -99,6 +100,34 @@ void CapycitySim::print_area()
         std::cout << "\n";
     }
     // print_information();
+    print_costs();
+}
+
+void CapycitySim::print_building_material_cost()
+{
+    Building* hydro = new Hydropowerstation();
+    Building* wind = new Windpowerstation();
+    Building* solar = new Solarpanel();
+    Material* wood = new Wood;
+    Material* metal = new Metal();
+    Material* plastic = new Plastic();
+
+    std::cout << "\nBasprice Buildings: " << std::endl;
+    std::cout << "Hydro " << hydro->get_label() << ": " << hydro->get_base_price() << std::endl;
+    std::cout << "Wind " << wind->get_label() << ": " << wind->get_base_price() << std::endl;
+    std::cout << "Solar " << solar->get_label() << ": " << solar->get_base_price() << std::endl;
+
+    std::cout << "\nBasprice Materials: " << std::endl;
+    std::cout << "Wood " << ": " << wood->get_price() << std::endl;
+    std::cout << "Metal " << ": " << metal->get_price() << std::endl;
+    std::cout << "Plastic "<< ": " << plastic->get_price() << std::endl;
+
+    delete hydro;
+    delete wind;
+    delete solar;
+    delete wood;
+    delete metal;
+    delete plastic;
 }
 
 // Check, if Building fits in area
@@ -116,7 +145,7 @@ bool CapycitySim::check_collission(int b_rows, int b_columns, int b_pos_r, int b
         {
             if((i >= b_pos_c && i < (b_pos_c + b_columns)) && (j >= b_pos_r && j < (b_pos_r + b_rows)))
             {
-                if(m_area[i][j] != " ")
+                if(m_area[i][j] != "0")
                 {
                     return false;
                     break;
@@ -168,6 +197,7 @@ double CapycitySim::calc_total_costs()
 void CapycitySim::set_building(Building* building)
 {
     int b_rows, b_columns, b_pos_r, b_pos_c;
+    int cnt = 0;
     //int select;
 
     std::cout << "Length: ";
@@ -182,6 +212,21 @@ void CapycitySim::set_building(Building* building)
 
     bool fits_in_area = in_area(b_rows, b_columns, b_pos_r, b_pos_c);
     bool no_collssion = check_collission(b_rows, b_columns, b_pos_r, b_pos_c);
+
+    for(int i = 0; i < m_columns; i++)
+    {
+        for(int j = 0; j < m_rows; j++)
+        {
+            if((i >= b_pos_c && i < (b_pos_c + b_columns)) && (j >= b_pos_r && j < (b_pos_r + b_rows)))
+            {
+                cnt++;
+            }
+        }
+    }
+
+    current_building_costs = building->get_base_price() + (building->sum_material_costs() * cnt);
+
+    current_total_costs += current_building_costs;
 
     // Building in area and no collission
     if(fits_in_area && no_collssion)
@@ -230,6 +275,19 @@ void CapycitySim::set_building(Building* building)
                 std::cout << "No changes made." << std::endl;
         }
     }
+
+    if(building->get_label() == "H")
+    {
+        current_aqua_costs += current_building_costs;
+    }
+    else if(building->get_label() == "W")
+    {
+        current_wind_costs += current_building_costs;
+    }
+    else if(building->get_label() == "S")
+    {
+        current_solar_costs += current_building_costs;
+    }
 }
 
 // Clear Area
@@ -242,9 +300,12 @@ void CapycitySim::clear_area()
             m_area[i][j] = BLANK;
         }
     }
+    current_total_costs = 0, current_building_costs = 0, current_aqua_costs = 0, current_wind_costs = 0, current_solar_costs = 0;
+
 }
 
 // Print Costs
+/*
 void CapycitySim::print_material_costs()
 {
     Building* hydro = new Hydropowerstation();
@@ -276,8 +337,10 @@ void CapycitySim::print_material_costs()
     delete metal;
     delete plastic;
 }
+*/
 
 // Print Information about the costs and needed materials for all buildings
+/*
 void CapycitySim::print_information()
 {
     Building* hydro = new Hydropowerstation();
@@ -338,4 +401,13 @@ void CapycitySim::print_information()
     delete wood;
     delete metal;
     delete plastic;
+}
+*/
+
+void CapycitySim::print_costs()
+{
+    std::cout << "Aqua: " << current_aqua_costs << std::endl;
+    std::cout << "Wind: " << current_wind_costs << std::endl;
+    std::cout << "Solar: " << current_solar_costs << std::endl;
+    std::cout << "Total: " << current_total_costs << std::endl;
 }
