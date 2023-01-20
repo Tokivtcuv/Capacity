@@ -23,6 +23,8 @@ class Building
         double total_costs();
         void generate_mat_list(int,int,int);
         std::string list_materials();
+        double get_power();
+
 
     private:
         std::string m_name;
@@ -30,6 +32,7 @@ class Building
         std::map<Material*, int> m_material_list;
         // std::vector<Material*> m_material_list;
         double m_base_price;
+        double m_power;
 };
 
 class Hydropowerstation : public Building

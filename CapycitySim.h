@@ -29,7 +29,6 @@ class CapycitySim
 
         double current_total_costs = 0, current_building_costs = 0, current_aqua_costs = 0, current_wind_costs = 0, current_solar_costs = 0;
 
-
     private:
         int m_rows;
         int m_columns;

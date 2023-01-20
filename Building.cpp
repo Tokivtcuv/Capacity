@@ -43,6 +43,7 @@ void Building::generate_mat_list(int w_cnt, int i_cnt, int p_cnt)
 
 
 }
+double Building::get_power() { return m_power; }
 
 /*
 std::string Building::get_name() { return m_name; }
